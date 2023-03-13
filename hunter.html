@@ -33,7 +33,7 @@
   <div id="penalty" class=" m-3 p-2 border border-dark border-3">
     Penalty is zero.
   </div>
-  <div class=" m-3 p-2 border border-dark border-3">
+  <div class=" m-3 p-2 border border-dark border-3" onclick="help()">
     Click for help.
   </div>
   <div id="help" class=" m-3 p-2 border border-dark border-3">
@@ -43,38 +43,102 @@
 
 <div class="d-flex flex-column">
   <div class="d-flex flex-row">
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
+    <div class="spot" id="bush0" onclick="check(0)"><img src="bush.avif"></div>
+    <div class="spot" id="bush1" onclick="check(1)"><img src="bush.avif"></div>
+    <div class="spot" id="bush2" onclick="check(2)"><img src="bush.avif"></div>
+    <div class="spot" id="bush3" onclick="check(3)"><img src="bush.avif"></div>
+    <div class="spot" id="bush4" onclick="check(4)"><img src="bush.avif"></div>
+    <div class="spot" id="bush5" onclick="check(5)"><img src="bush.avif"></div>
   </div>
   <div class="d-flex flex-row">
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
+    <div class="spot" id="bush6" onclick="check(6)"><img src="bush.avif"></div>
+    <div class="spot" id="bush7" onclick="check(7)"><img src="bush.avif"></div>
+    <div class="spot" id="bush8" onclick="check(8)"><img src="bush.avif"></div>
+    <div class="spot" id="bush9" onclick="check(9)"><img src="bush.avif"></div>
+    <div class="spot" id="bush10" onclick="check(10)"><img src="bush.avif"></div>
+    <div class="spot" id="bush11" onclick="check(11)"><img src="bush.avif"></div>
   </div>
   <div class="d-flex flex-row">
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
+    <div class="spot" id="bush12" onclick="check(12)"><img src="bush.avif"></div>
+    <div class="spot" id="bush13" onclick="check(13)"><img src="bush.avif"></div>
+    <div class="spot" id="bush14" onclick="check(14)"><img src="bush.avif"></div>
+    <div class="spot" id="bush15" onclick="check(15)"><img src="bush.avif"></div>
+    <div class="spot" id="bush16" onclick="check(16)"><img src="bush.avif"></div>
+    <div class="spot" id="bush17" onclick="check(17)"><img src="bush.avif"></div>
   </div>
   <div class="d-flex flex-row">
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
-    <div class="spot"><img src="bush.avif"></div>
+    <div class="spot" id="bush18" onclick="check(18)"><img src="bush.avif"></div>
+    <div class="spot" id="bush19" onclick="check(19)"><img src="bush.avif"></div>
+    <div class="spot" id="bush20" onclick="check(20)"><img src="bush.avif"></div>
+    <div class="spot" id="bush21" onclick="check(21)"><img src="bush.avif"></div>
+    <div class="spot" id="bush22" onclick="check(22)"><img src="bush.avif"></div>
+    <div class="spot" id="bush23" onclick="check(23)"><img src="bush.avif"></div>
   </div>
 </div>
 
+<script>
+  let ids = ['bush0', 'bush1', 'bush2', 'bush3', 'bush4', 'bush5', 'bush6', 'bush7', 'bush8', 'bush9',
+  'bush10', 'bush11', 'bush12', 'bush13', 'bush14', 'bush15', 'bush16', 'bush17', 'bush18',
+  'bush19', 'bush20', 'bush21', 'bush22', 'bush23']
+  let checkCount = 0
+  let penalty = 0
+  let lastCheck = 0
+  let mouseLocation = 13
+  let catLocation = 21
+  let gameOver = false
+
+  function check(num) {
+    console.log('got click from bush ' + num)
+    if (!gameOver) {
+      let bush = document.getElementById(ids[num])
+
+      if (num == mouseLocation) {
+        bush.innerHTML = "<img src='mouse.webp'>"
+        gameOver = true
+        penalty -= 3
+      }
+      else if (num == catLocation) {
+        bush.innerHTML = "<img src='tiger.avif'>"
+        gameOver = true
+        penalty += 4
+      }
+      else {
+        bush.innerHTML = "<img src='grass.png'>"
+      }
+
+      checkCount += 1
+      penalty += 1
+      lastCheck = num
+
+      document.getElementById('bushes').textContent = `Number of bushes checked is ${checkCount}.`
+      document.getElementById('penalty').textContent = `Penalty is ${penalty}.`
+    }
+  }
+
+  function help() {
+    let catRow = Math.ceil(catLocation / 6)
+    let catCol = (catLocation % 6) + 1
+    let lastRow = Math.ceil(lastCheck / 6)
+    let lastCol = (lastCheck % 6) + 1
+    let mouseRow = Math.ceil(mouseLocation / 6)
+    let mouseCol = (mouseLocation % 6) + 1
+    let helpText = ''
+
+    if (Math.abs(catRow - lastRow) <= 1 && Math.abs(catCol - lastCol) <= 1) {
+      helpText = 'Meow'
+    }
+    else if ((Math.abs(mouseRow - lastRow) <= 1) && (Math.abs(mouseCol - lastCol) <= 1)) {
+      helpText = 'Squeak'
+    }
+    else {
+      helpText = 'Sorry :('
+    }
+
+    penalty += 2
+
+    document.getElementById('penalty').textContent = `Penalty is ${penalty}.`
+    document.getElementById('help').textContent = helpText
+  }
+</script>
 </body>
 </html>
